@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday, My Love ✨💖</title>
+  
+  <!-- Google Fonts: Mitr, Mali, and Prompt for romantic Thai typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mali:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Mitr:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      font-family: 'Mali', 'Mitr', sans-serif;
+      scroll-behavior: smooth;
+      background: radial-gradient(circle at 10% 20%, #fff1f2 0%, #ffe4e6 40%, #fed7aa 95%);
+    }
+
+    .font-serif-en {
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* Ambient float keyframes */
+    @keyframes floatParticle {
+      0% { transform: translateY(100vh) scale(0.6) rotate(0deg); opacity: 0; }
+      20% { opacity: 0.8; }
+      80% { opacity: 0.8; }
+      100% { transform: translateY(-10vh) scale(1.1) rotate(360deg); opacity: 0; }
+    }
+
+    .heart-particle {
+      position: absolute;
+      pointer-events: none;
+      animation: floatParticle linear infinite;
+    }
+
+    /* Candle Flame Flickering */
+    @keyframes flicker {
+      0%, 100% { transform: scale(1) rotate(-1deg); opacity: 0.95; }
+      25% { transform: scale(1.08, 0.92) rotate(2deg); opacity: 1; }
+      50% { transform: scale(0.94, 1.06) rotate(-2deg); opacity: 0.85; }
+      75% { transform: scale(1.04, 0.96) rotate(1deg); opacity: 0.95; }
+    }
+
+    @keyframes flameGlow {
+      0%, 100% { filter: drop-shadow(0 0 10px rgba(251, 146, 60, 0.8)) drop-shadow(0 0 25px rgba(239, 68, 68, 0.5)); }
+      50% { filter: drop-shadow(0 0 16px rgba(251, 191, 36, 0.9)) drop-shadow(0 0 35px rgba(245, 158, 11, 0.6)); }
+    }
+
+    .flame-on {
+      animation: flicker 1.8s infinite ease-in-out, flameGlow 2.5s infinite alternate;
+      transform-origin: bottom center;
+      transition: all 0.5s ease;
+    }
+
+    .flame-extinguished {
+      opacity: 0 !important;
+      transform: scale(0.1) translateY(-20px) !important;
+      filter: blur(4px) !important;
+    }
+
+    /* Candle Smoke Animation */
+    @keyframes riseSmoke {
+      0% { opacity: 0.8; transform: translate(-50%, 0) scale(1); }
+      50% { opacity: 0.5; transform: translate(-40%, -25px) scale(2); }
+      100% { opacity: 0; transform: translate(-60%, -55px) scale(3.5); }
+    }
+
+    .smoke-puff {
+      animation: riseSmoke 1.6s forwards ease-out;
+    }
+
+    /* Envelope Opening CSS 3D */
+    .envelope-wrapper {
+      perspective: 1000px;
+    }
+
+    .envelope-flap {
+      transform-origin: top center;
+      transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .envelope-open .envelope-flap {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+
+    .letter-paper {
+      transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s;
+    }
+
+    .envelope-open .letter-paper {
+      transform: translateY(-110px);
+      z-index: 10;
+    }
+
+    /* Glassmorphism styling */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 12px 35px -8px rgba(244, 114, 182, 0.18), 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+    }
+
+    .glass-card-warm {
+      background: rgba(255, 250, 245, 0.88);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(254, 215, 170, 0.6);
+      box-shadow: 0 15px 35px -5px rgba(251, 146, 60, 0.15);
+    }
+
+    /* Polaroid vintage effect */
+    .polaroid-item {
+      transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .polaroid-item:hover {
+      transform: translateY(-8px) scale(1.03) rotate(0deg) !important;
+      box-shadow: 0 20px 30px -10px rgba(244, 63, 94, 0.25);
+    }
+
+    /* Tape visual */
+    .tape {
+      background: rgba(254, 240, 138, 0.65);
+      backdrop-filter: blur(2px);
+      border-left: 2px dashed rgba(251, 191, 36, 0.4);
+      border-right: 2px dashed rgba(251, 191, 36, 0.4);
+    }
+  </style>
+</head>
+<body class="min-h-screen text-stone-800 overflow-x-hidden relative selection:bg-rose-200">
+
+  <div id="particles-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+  <!-- Music toggle & Top navigation pill -->
+  <nav class="fixed top-4 right-4 sm:right-6 z-50 flex items-center space-x-2">
+    <button id="musicToggleBtn" class="flex items-center space-x-2 px-4 py-2 rounded-full glass-card hover:bg-white text-rose-600 transition-all shadow-md active:scale-95 text-xs sm:text-sm font-medium">
+      <i id="musicIcon" data-lucide="volume-x" class="w-4 h-4"></i>
+      <span id="musicText">เปิดเพลงรัก 🎵</span>
+    </button>
+  </nav>
+
+  <main class="relative z-10 flex flex-col items-center">
+    
+    <!-- Hero Section -->
+    <section class="min-h-screen w-full flex flex-col items-center justify-center text-center px-4 sm:px-6 relative py-16">
+      
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-100/80 border border-rose-200 text-rose-600 text-xs sm:text-sm font-medium mb-6 animate-pulse">
+        <span>✨ </span>
+        <span class="tracking-wide">สุขสันต์วันเกิดคนพิเศษที่สุดในโลก</span>
+        <span> ❤️</span>
+      </div>
+
+      <h1 class="font-serif-en text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-rose-950 mb-3 drop-shadow-sm">
+        Happy Birthday, <br/>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500">
+          My Favorite Person
+        </span>
+      </h1>
+
+      <p class="max-w-md sm:max-w-lg text-rose-800/80 text-base sm:text-lg mb-8 leading-relaxed">
+        ขอบคุณที่เกิดมาให้เค้าได้รักนะคนดี วันนี้เป็นวันของเธอ ขอให้เธอมีแต่รอยยิ้มที่สดใสในทุกๆ วันนะ 🎂✨
+      </p>
+
+      <!-- Romantic Countdown / Days Together Counter -->
+      <div class="grid grid-cols-3 gap-3 sm:gap-6 mb-10 w-full max-w-sm sm:max-w-md">
+        <div class="glass-card p-3 sm:p-4 rounded-2xl text-center">
+          <span class="block text-2xl sm:text-3xl font-bold text-rose-500 font-serif-en" id="daysCounter">365+</span>
+          <span class="text-xs text-rose-700/70 font-medium">วันที่ได้รักกัน</span>
+        </div>
+        <div class="glass-card p-3 sm:p-4 rounded-2xl text-center">
+          <span class="block text-2xl sm:text-3xl font-bold text-pink-500 font-serif-en">100%</span>
+          <span class="text-xs text-rose-700/70 font-medium">ความตั้งใจรัก</span>
+        </div>
+        <div class="glass-card p-3 sm:p-4 rounded-2xl text-center">
+          <span class="block text-2xl sm:text-3xl font-bold text-amber-500 font-serif-en">∞</span>
+          <span class="text-xs text-rose-700/70 font-medium">ความน่ารักของเธอ</span>
+        </div>
+      </div>
+
+      <!-- Action Button to scroll down smoothly -->
+      <a href="#cake-section" class="group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-rose-500 via-pink-500 to-rose-400 text-white font-semibold text-base sm:text-lg shadow-lg shadow-rose-400/40 hover:shadow-rose-400/60 hover:scale-105 active:scale-95 transition-all">
+        <span>เริ่มต้นของขวัญวันเกิด 🎁</span>
+        <i data-lucide="chevron-down" class="w-5 h-5 group-hover:translate-y-1 transition-transform"></i>
+      </a>
+
+      <!-- Floating gentle scroll reminder -->
+      <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-rose-400 text-xs flex flex-col items-center opacity-70 animate-bounce">
+        <span>เลื่อนลงมาดูนะ</span>
+      </div>
+    </section>
+
+    <section id="cake-section" class="w-full max-w-3xl px-4 py-16 sm:py-24 flex flex-col items-center">
+      
+      <div class="text-center mb-8">
+        <span class="text-rose-500 text-sm font-semibold tracking-wider uppercase">Make a wish!</span>
+        <h2 class="text-2xl sm:text-4xl font-bold text-rose-950 mt-1">อธิษฐานแล้วเป่าเทียนด้วยกันนะ</h2>
+        <p class="text-rose-700/70 text-sm sm:text-base mt-2">หลับตาขอพรสิ่งดีๆ แล้วกดปุ่มเป่าเทียนเค้กได้เลยจ้า ✨</p>
+      </div>
+
+      <!-- The Cake SVG Presentation -->
+      <div class="relative w-72 h-72 sm:w-88 sm:h-88 flex items-center justify-center my-4">
+        
+        <!-- Smoke Effects Container (Hidden by default, shown upon blowing) -->
+        <div id="smokeContainer" class="absolute top-12 left-1/2 -translate-x-1/2 pointer-events-none hidden">
+          <div class="relative">
+            <span class="smoke-puff absolute -left-8 -top-3 w-5 h-5 bg-stone-300/60 rounded-full blur-[2px]"></span>
+            <span class="smoke-puff absolute left-0 -top-6 w-6 h-6 bg-stone-300/70 rounded-full blur-[2px]" style="animation-delay: 0.15s"></span>
+            <span class="smoke-puff absolute left-7 -top-4 w-5 h-5 bg-stone-300/60 rounded-full blur-[2px]" style="animation-delay: 0.3s"></span>
+          </div>
+        </div>
+
+        <!-- Custom SVG Cake Illustration -->
+        <svg viewBox="0 0 320 320" class="w-full h-full drop-shadow-2xl">
+          <!-- Cake Plate / Stand -->
+          <ellipse cx="160" cy="285" rx="125" ry="18" fill="#e2e8f0" />
+          <ellipse cx="160" cy="282" rx="120" ry="14" fill="#ffffff" />
+          
+          <!-- Cake Bottom Tier -->
+          <path d="M 65 200 C 65 240, 255 240, 255 200 L 255 260 C 255 285, 65 285, 65 260 Z" fill="#fbcfe8" />
+          <!-- Cream drip base -->
+          <path d="M 65 200 C 95 215, 120 195, 150 215 C 180 195, 215 215, 255 200 L 255 215 C 220 230, 185 210, 155 230 C 125 210, 95 230, 65 215 Z" fill="#fda4af" />
+          
+          <!-- Cake Top Tier -->
+          <path d="M 90 145 C 90 175, 230 175, 230 145 L 230 195 C 230 220, 90 220, 90 195 Z" fill="#ffe4e6" />
+          <ellipse cx="160" cy="145" rx="70" ry="20" fill="#fff1f2" />
+
+          <!-- Strawberry Frosting Details -->
+          <ellipse cx="160" cy="148" rx="66" ry="17" fill="#f43f5e" opacity="0.85" />
+          <ellipse cx="160" cy="146" rx="63" ry="15" fill="#fbcfe8" />
+          <circle cx="120" cy="145" r="4" fill="#fb7185" />
+          <circle cx="140" cy="151" r="3.5" fill="#fb7185" />
+          <circle cx="160" cy="152" r="4.5" fill="#f43f5e" />
+          <circle cx="180" cy="150" r="3.5" fill="#fb7185" />
+          <circle cx="200" cy="144" r="4" fill="#fb7185" />
+
+          <!-- Left Candle -->
+          <rect x="122" y="85" width="8" height="50" rx="3" fill="#f472b6" />
+          <line x1="124" y1="90" x2="128" y2="130" stroke="#fdf2f8" stroke-width="2" stroke-linecap="round" />
+          <line x1="126" y1="85" x2="126" y2="76" stroke="#475569" stroke-width="1.5" />
+          
+          <!-- Center Main Candle -->
+          <rect x="156" y="70" width="9" height="65" rx="3" fill="#fbbf24" />
+          <line x1="158" y1="75" x2="163" y2="130" stroke="#fffbeb" stroke-width="2.5" stroke-linecap="round" />
+          <line x1="160.5" y1="70" x2="160.5" y2="60" stroke="#475569" stroke-width="2" />
+          
+          <!-- Right Candle -->
+          <rect x="190" y="85" width="8" height="50" rx="3" fill="#60a5fa" />
+          <line x1="192" y1="90" x2="196" y2="130" stroke="#eff6ff" stroke-width="2" stroke-linecap="round" />
+          <line x1="194" y1="85" x2="194" y2="76" stroke="#475569" stroke-width="1.5" />
+
+          <!-- Candle Flames (Interactive ID) -->
+          <g id="cakeFlames" class="flame-on">
+            <!-- Left Flame -->
+            <path d="M 126 58 C 120 68, 122 75, 126 76 C 130 75, 132 68, 126 58 Z" fill="#f59e0b" />
+            <path d="M 126 64 C 123 69, 124 74, 126 75 C 128 74, 129 69, 126 64 Z" fill="#fef08a" />
+
+            <!-- Center Big Flame -->
+            <path d="M 160.5 38 C 153 50, 155 59, 160.5 60 C 166 59, 168 50, 160.5 38 Z" fill="#ea580c" />
+            <path d="M 160.5 44 C 155 53, 156 59, 160.5 60 C 165 59, 166 53, 160.5 44 Z" fill="#facc15" />
+            <path d="M 160.5 50 C 158 55, 158.5 59, 160.5 60 C 162.5 59, 163 55, 160.5 50 Z" fill="#ffffff" />
+
+            <!-- Right Flame -->
+            <path d="M 194 58 C 188 68, 190 75, 194 76 C 198 75, 200 68, 194 58 Z" fill="#f59e0b" />
+            <path d="M 194 64 C 191 69, 192 74, 194 75 C 196 74, 197 69, 194 64 Z" fill="#fef08a" />
+          </g>
+        </svg>
+      </div>
+
+      <!-- Action Button: Blow candles -->
+      <div class="flex flex-col items-center gap-3">
+        <button id="blowCandleBtn" class="flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-rose-500 hover:bg-rose-600 text-white font-semibold text-lg shadow-md shadow-rose-300 hover:scale-105 active:scale-95 transition-all">
+          <i data-lucide="wind" class="w-5 h-5"></i>
+          <span>เป่าเทียนเลย 🎂💨</span>
+        </button>
+
+        <p id="wishStatusText" class="text-sm font-medium text-rose-600 opacity-90 h-6">
+          กดปุ่มเป่าเทียนเพื่อส่งคำอธิษฐานไปถึงดวงดาว ✨
+        </p>
+      </div>
+
+    </section>
+
+    <section class="w-full max-w-2xl px-4 py-16 flex flex-col items-center">
+      <div class="text-center mb-10">
+        <span class="text-rose-500 text-sm font-semibold tracking-wider uppercase">Love Letter</span>
+        <h2 class="text-2xl sm:text-3xl font-bold text-rose-950 mt-1">จดหมายจากหัวใจถึงเธอ 💌</h2>
+        <p class="text-stone-500 text-xs sm:text-sm mt-1">กดที่ซองจดหมายเพื่อเปิดอ่านความในใจนะ</p>
+      </div>
+
+      <!-- Interactive Envelope Component -->
+      <div class="envelope-wrapper relative w-full max-w-md h-80 flex items-center justify-center cursor-pointer select-none" id="envelopeTrigger">
+        
+        <!-- Background Envelope Back & Pocket -->
+        <div class="absolute bottom-4 w-72 sm:w-80 h-52 bg-rose-200 rounded-b-2xl shadow-xl border-2 border-rose-300/80 z-0"></div>
+
+        <!-- The Letter Sheet (Slide up on trigger) -->
+        <div id="letterPaper" class="letter-paper absolute bottom-6 w-64 sm:w-72 bg-amber-50 rounded-xl p-5 shadow-md border border-amber-200 z-1 pointer-events-none transition-all duration-700 ease-out">
+          <div class="border-b border-rose-200 pb-2 mb-3 flex items-center justify-between">
+            <span class="text-xs font-bold text-rose-600 tracking-wide">ถึง คนโปรดของเค้า ❤️</span>
+            <span class="text-[10px] text-stone-400">พิเศษเฉพาะเธอ</span>
+          </div>
+          <p class="text-xs sm:text-sm text-stone-700 leading-relaxed font-light">
+            สุขสันต์วันเกิดนะที่รัก! 🎉 ขอบคุณที่เข้ามาเป็นความสดใส เป็นรอยยิ้ม และเป็นกำลังใจที่ดีที่สุดในทุกๆ วัน ไม่ว่าจะเจอเรื่องเหนื่อยแค่ไหน พอเห็นหน้าเธอเค้าก็มีความสุขแล้ว เค้าสัญญาว่าจะคอยดูแล เอาใจใส่ และอยู่เคียงข้างเธอแบบนี้ไปนานๆ เลยนะ มีความสุขมากๆ สุขภาพแข็งแรง รักเธอที่สุดในโลกเลย! 💕
+          </p>
+          <div class="mt-3 text-right">
+            <span class="text-xs font-semibold text-rose-500 font-serif-en">Forever Yours xoxo</span>
+          </div>
+        </div>
+
+        <!-- Front Left & Right Envelope folds -->
+        <div class="absolute bottom-4 w-72 sm:w-80 h-52 pointer-events-none z-20 overflow-hidden rounded-b-2xl">
+          <!-- Left flap -->
+          <div class="absolute left-0 bottom-0 w-0 h-0 border-t-[104px] border-t-transparent border-b-[104px] border-b-rose-300 border-l-[144px] sm:border-l-[160px] border-l-rose-300/90"></div>
+          <!-- Right flap -->
+          <div class="absolute right-0 bottom-0 w-0 h-0 border-t-[104px] border-t-transparent border-b-[104px] border-b-rose-300 border-r-[144px] sm:border-r-[160px] border-r-rose-300/90"></div>
+          <!-- Bottom fold -->
+          <div class="absolute bottom-0 left-0 right-0 h-0 border-b-[110px] border-b-rose-400/90 border-l-[144px] sm:border-l-[160px] border-l-transparent border-r-[144px] sm:border-r-[160px] border-r-transparent"></div>
+        </div>
+
+        <!-- Top Triangular Envelope Flap -->
+        <div id="envelopeFlap" class="envelope-flap absolute top-[68px] sm:top-[68px] w-72 sm:w-80 h-0 border-t-[115px] border-t-rose-400 border-l-[144px] sm:border-l-[160px] border-l-transparent border-r-[144px] sm:border-r-[160px] border-r-transparent z-30 transition-transform duration-500 origin-top"></div>
+
+        <!-- Heart Seal Stamp -->
+        <div id="heartSeal" class="absolute top-[148px] sm:top-[148px] z-40 w-12 h-12 rounded-full bg-rose-500 shadow-md flex items-center justify-center text-white text-lg transition-transform hover:scale-110">
+          <i data-lucide="heart" class="w-6 h-6 fill-white"></i>
+        </div>
+
+      </div>
+
+      <p class="text-xs text-rose-500/80 mt-4 flex items-center gap-1.5">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+        <span>คลิกที่ซองเพื่อเปิดหรือปิดจดหมาย</span>
+      </p>
+    </section>
+
+    <section class="w-full max-w-5xl px-4 py-16">
+      <div class="text-center mb-12">
+        <span class="text-rose-500 text-sm font-semibold tracking-wider uppercase">Our Precious Moments</span>
+        <h2 class="text-2xl sm:text-4xl font-bold text-rose-950 mt-1">คลังความทรงจำของเรา 📸</h2>
+        <p class="text-rose-800/70 text-sm sm:text-base mt-2">ทุกช่วงเวลาที่มีเธอ ล้วนเป็นช่วงเวลาที่แสนวิเศษ</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-6 justify-items-center">
+        
+        <!-- Polaroid Card 1 -->
+        <div class="polaroid-item bg-white p-4 pb-6 rounded-md shadow-lg max-w-[270px] w-full transform -rotate-2 relative cursor-pointer group" onclick="openPhotoModal('เดทแรกแสนหวาน 🍰', 'วันนั้นตื่นเต้นมาก แต่พอได้เห็นรอยยิ้มเธอ โลกก็สดใสขึ้นมาทันทีเลย', 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&auto=format&fit=crop&q=80')">
+          <div class="tape absolute -top-3 left-1/2 -translate-x-1/2 w-20 h-6 rotate-1 z-10"></div>
+          <div class="overflow-hidden rounded bg-stone-100 aspect-square mb-3">
+            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&auto=format&fit=crop&q=80" 
+                 alt="Memory 1" 
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                 onerror="this.src='https://placehold.co/400x400/ffd1dc/9f1239?text=First+Date+Memory'">
+          </div>
+          <p class="text-center font-semibold text-stone-700 text-sm">เดทแรกของเรา ☕</p>
+          <p class="text-center text-xs text-rose-400 mt-0.5">วันนั้นตื่นเต้นจนทำอะไรไม่ถูกเลย</p>
+        </div>
+
+        <!-- Polaroid Card 2 -->
+        <div class="polaroid-item bg-white p-4 pb-6 rounded-md shadow-lg max-w-[270px] w-full transform rotate-3 relative cursor-pointer group" onclick="openPhotoModal('ทริปเที่ยวด้วยกัน 🌊', 'ทุกการเดินทางมีความหมายเสมอเมื่อมีเธอเดินข้างๆ จับมือกันไปเที่ยวรอบโลกกันนะ', 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600&auto=format&fit=crop&q=80')">
+          <div class="tape absolute -top-3 left-1/2 -translate-x-1/2 w-20 h-6 -rotate-2 z-10"></div>
+          <div class="overflow-hidden rounded bg-stone-100 aspect-square mb-3">
+            <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600&auto=format&fit=crop&q=80" 
+                 alt="Memory 2" 
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                 onerror="this.src='https://placehold.co/400x400/fecdd3/881337?text=Travel+Together'">
+          </div>
+          <p class="text-center font-semibold text-stone-700 text-sm">ทริปแห่งความสุข ✈️</p>
+          <p class="text-center text-xs text-rose-400 mt-0.5">จับมือเที่ยวด้วยกันทุกที่เลยนะ</p>
+        </div>
+
+        <!-- Polaroid Card 3 -->
+        <div class="polaroid-item bg-white p-4 pb-6 rounded-md shadow-lg max-w-[270px] w-full transform -rotate-1 relative cursor-pointer group" onclick="openPhotoModal('มื้อโปรดกับคนโปรด 🍜', 'ไม่สำคัญว่าจะกินอะไร แค่ได้นั่งกินข้าวกับเธอ อาหารทุกมื้อก็อร่อยที่สุดในสามโลก', 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&auto=format&fit=crop&q=80')">
+          <div class="tape absolute -top-3 left-1/2 -translate-x-1/2 w-20 h-6 rotate-3 z-10"></div>
+          <div class="overflow-hidden rounded bg-stone-100 aspect-square mb-3">
+            <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&auto=format&fit=crop&q=80" 
+                 alt="Memory 3" 
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                 onerror="this.src='https://placehold.co/400x400/fed7aa/7c2d12?text=Dinner+Date'">
+          </div>
+          <p class="text-center font-semibold text-stone-700 text-sm">มื้อโปรดของเราสองคน 🍲</p>
+          <p class="text-center text-xs text-rose-400 mt-0.5">กินของอร่อยข้างเธอมันฟินที่สุด</p>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="w-full max-w-4xl px-4 py-16 mb-12">
+      <div class="text-center mb-10">
+        <span class="text-rose-500 text-sm font-semibold tracking-wider uppercase">Birthday Perks</span>
+        <h2 class="text-2xl sm:text-3xl font-bold text-rose-950 mt-1">สมุดคูปองตามใจแฟน 🎟️</h2>
+        <p class="text-stone-500 text-xs sm:text-sm mt-1">สิทธิพิเศษฉบับวันเกิด กดใช้สิทธิ์ได้ตลอดชีพ!</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        
+        <!-- Coupon 1 -->
+        <div class="glass-card-warm rounded-2xl p-5 border-dashed border-2 border-amber-300 relative overflow-hidden flex flex-col justify-between">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-rose-100 flex items-center justify-center text-rose-500">
+                <i data-lucide="hand" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-stone-800 text-sm sm:text-base">คูปองนวดไหล่/นวดหลัง 30 นาที</h3>
+                <p class="text-xs text-stone-500">บริการนวดผ่อนคลายเต็มระบบตามสั่ง</p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-amber-200/60 flex items-center justify-between">
+            <span class="text-[11px] text-amber-700/80 font-medium">ใช้ได้: ไม่จำกัดจำนวนครั้ง</span>
+            <button onclick="redeemCoupon(this, 'นวดหลัง 30 นาที')" class="coupon-btn px-4 py-1.5 rounded-full bg-rose-500 hover:bg-rose-600 active:scale-95 text-white text-xs font-semibold shadow transition-all">
+              กดใช้คูปอง ✨
+            </button>
+          </div>
+        </div>
+
+        <!-- Coupon 2 -->
+        <div class="glass-card-warm rounded-2xl p-5 border-dashed border-2 border-rose-300 relative overflow-hidden flex flex-col justify-between">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-pink-100 flex items-center justify-center text-pink-500">
+                <i data-lucide="utensils" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-stone-800 text-sm sm:text-base">คูปองพาไปกินของอร่อยตามใจ 1 มื้อ</h3>
+                <p class="text-xs text-stone-500">อยากกินอะไร ชาบู บุฟเฟต์ ของหวาน เค้าเลี้ยงเอง!</p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-rose-200/60 flex items-center justify-between">
+            <span class="text-[11px] text-rose-700/80 font-medium">ใช้ได้: มื้อไหนก็ได้</span>
+            <button onclick="redeemCoupon(this, 'พาไปกินของอร่อยตามใจ')" class="coupon-btn px-4 py-1.5 rounded-full bg-rose-500 hover:bg-rose-600 active:scale-95 text-white text-xs font-semibold shadow transition-all">
+              กดใช้คูปอง ✨
+            </button>
+          </div>
+        </div>
+
+        <!-- Coupon 3 -->
+        <div class="glass-card-warm rounded-2xl p-5 border-dashed border-2 border-amber-300 relative overflow-hidden flex flex-col justify-between">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-amber-500">
+                <i data-lucide="smile" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-stone-800 text-sm sm:text-base">คูปองห้ามงอน & ตามใจ 1 วันเต็ม</h3>
+                <p class="text-xs text-stone-500">จะยอมเป็นเด็กดี ไม่ดื้อ ไม่ขัดใจทั้งวันเลย</p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-amber-200/60 flex items-center justify-between">
+            <span class="text-[11px] text-amber-700/80 font-medium">ใช้ได้: วันไหนที่เหนื่อยๆ</span>
+            <button onclick="redeemCoupon(this, 'ห้ามงอน 1 วัน')" class="coupon-btn px-4 py-1.5 rounded-full bg-rose-500 hover:bg-rose-600 active:scale-95 text-white text-xs font-semibold shadow transition-all">
+              กดใช้คูปอง ✨
+            </button>
+          </div>
+        </div>
+
+        <!-- Coupon 4 -->
+        <div class="glass-card-warm rounded-2xl p-5 border-dashed border-2 border-rose-300 relative overflow-hidden flex flex-col justify-between">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-rose-100 flex items-center justify-center text-rose-500">
+                <i data-lucide="heart-handshake" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-stone-800 text-sm sm:text-base">คูปองกอดแน่นๆ เติมพลังใจ</h3>
+                <p class="text-xs text-stone-500">กอดฟรี กอดอุ่นๆ ตลอดชีพ เมื่อไหร่ที่ต้องการ</p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-rose-200/60 flex items-center justify-between">
+            <span class="text-[11px] text-rose-700/80 font-medium">สิทธิพิเศษ: ไม่จำกัดอายุ</span>
+            <button onclick="redeemCoupon(this, 'กอดแน่นๆ เติมพลัง')" class="coupon-btn px-4 py-1.5 rounded-full bg-rose-500 hover:bg-rose-600 active:scale-95 text-white text-xs font-semibold shadow transition-all">
+              กดใช้คูปอง ✨
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <footer class="w-full py-12 text-center border-t border-rose-200/60 bg-white/40">
+      <div class="flex items-center justify-center gap-2 text-rose-500 mb-2">
+        <i data-lucide="sparkling" class="w-4 h-4"></i>
+        <i data-lucide="heart" class="w-5 h-5 fill-rose-500"></i>
+        <i data-lucide="sparkling" class="w-4 h-4"></i>
+      </div>
+      <p class="text-sm font-semibold text-rose-900">Made with endless love for you</p>
+      <p class="text-xs text-rose-600/70 mt-1">ขอให้วันเกิดปีนี้เป็นปีที่ดีและมีความสุขที่สุดนะคนเก่ง 💖</p>
+    </footer>
+
+  </main>
+
+  <!-- Photo Modal View -->
+  <div id="photoModal" class="fixed inset-0 bg-stone-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-4 overflow-hidden shadow-2xl relative">
+      <button onclick="closePhotoModal()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-600 hover:bg-rose-100 hover:text-rose-600 transition-colors">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <img id="modalImg" src="" alt="Memory modal" class="w-full aspect-square object-cover rounded-xl mt-2 mb-3">
+      <h3 id="modalTitle" class="font-bold text-stone-800 text-base"></h3>
+      <p id="modalDesc" class="text-xs text-stone-600 mt-1 leading-relaxed"></p>
+    </div>
+  </div>
+
+  <!-- Custom Alert Toast Box (Replaces alert()) -->
+  <div id="toastBox" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none transform translate-y-20 opacity-0 transition-all duration-300">
+    <div class="bg-stone-900/90 text-white px-5 py-3 rounded-full text-xs sm:text-sm font-medium shadow-xl flex items-center gap-2 border border-white/20">
+      <i data-lucide="sparkles" class="w-4 h-4 text-amber-300"></i>
+      <span id="toastMessage">แจ้งเตือน</span>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    /* 1. Floating Romantic Heart Background Generator */
+    function initFloatingHearts() {
+      const container = document.getElementById('particles-container');
+      const emojis = ['💖', '🌸', '✨', '💕', '🌷', '🎂', '💌'];
+      const count = 22;
+
+      for (let i = 0; i < count; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'heart-particle select-none';
+        particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        
+        // Random horizontal position, scale, and animation timing
+        particle.style.left = `${Math.random() * 100}vw`;
+        particle.style.animationDuration = `${8 + Math.random() * 10}s`;
+        particle.style.animationDelay = `${Math.random() * 8}s`;
+        particle.style.fontSize = `${14 + Math.random() * 20}px`;
+        
+        container.appendChild(particle);
+      }
+    }
+    initFloatingHearts();
+
+    /* 2. Web Audio API - Romantic Synthesizer Melody & Chimes */
+    let audioCtx = null;
+    let isPlayingMusic = false;
+    let melodyTimer = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    // Play a single soft music note
+    function playTone(freq, duration, type = 'sine', gainVal = 0.08) {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+
+        gain.gain.setValueAtTime(gainVal, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (err) {
+        console.warn("Audio playback not supported or user gesture needed", err);
+      }
+    }
+
+    // Happy birthday celebration chime sound
+    function playCelebrationFanfare() {
+      const notes = [261.63, 261.63, 293.66, 261.63, 349.23, 329.63, 392.00, 523.25];
+      notes.forEach((freq, idx) => {
+        setTimeout(() => {
+          playTone(freq, 0.45, 'triangle', 0.12);
+        }, idx * 160);
+      });
+    }
+
+    // Gentle soft romantic loop (C Major pentatonic chords)
+    const romanticChords = [
+      [261.63, 329.63, 392.00], // C
+      [220.00, 261.63, 329.63], // Am
+      [174.61, 220.00, 261.63], // F
+      [196.00, 246.94, 293.66]  // G
+    ];
+
+    let chordIndex = 0;
+    function startRomanticBgMusic() {
+      if (melodyTimer) clearInterval(melodyTimer);
+      
+      melodyTimer = setInterval(() => {
+        if (!isPlayingMusic) return;
+        const chord = romanticChords[chordIndex % romanticChords.length];
+        chord.forEach((freq, i) => {
+          setTimeout(() => {
+            if (isPlayingMusic) playTone(freq * 1.5, 1.8, 'sine', 0.04);
+          }, i * 280);
+        });
+        chordIndex++;
+      }, 2200);
+    }
+
+    // Music toggle button
+    const musicBtn = document.getElementById('musicToggleBtn');
+    const musicIcon = document.getElementById('musicIcon');
+    const musicText = document.getElementById('musicText');
+
+    musicBtn.addEventListener('click', () => {
+      getAudioContext();
+      isPlayingMusic = !isPlayingMusic;
+
+      if (isPlayingMusic) {
+        musicText.textContent = "กำลังเล่นเพลงรัก 🎶";
+        musicIcon.setAttribute('data-lucide', 'volume-2');
+        musicBtn.classList.add('bg-rose-50', 'text-rose-600', 'ring-2', 'ring-rose-300');
+        startRomanticBgMusic();
+        showToast("เปิดเสียงดนตรีรักเรียบร้อย 🎵💖");
+      } else {
+        musicText.textContent = "เปิดเพลงรัก 🎵";
+        musicIcon.setAttribute('data-lucide', 'volume-x');
+        musicBtn.classList.remove('bg-rose-50', 'text-rose-600', 'ring-2', 'ring-rose-300');
+        if (melodyTimer) clearInterval(melodyTimer);
+      }
+      lucide.createIcons();
+    });
+
+    /* 3. Blow Candle & Wish Feature */
+    let candlesBlown = false;
+    const blowBtn = document.getElementById('blowCandleBtn');
+    const cakeFlames = document.getElementById('cakeFlames');
+    const smokeContainer = document.getElementById('smokeContainer');
+    const wishStatusText = document.getElementById('wishStatusText');
+
+    blowBtn.addEventListener('click', () => {
+      getAudioContext();
+      if (!candlesBlown) {
+        // Extinguish candles
+        candlesBlown = true;
+        cakeFlames.classList.remove('flame-on');
+        cakeFlames.classList.add('flame-extinguished');
+        smokeContainer.classList.remove('hidden');
+
+        // Play celebration fanfare chime
+        playCelebrationFanfare();
+
+        // Canvas Confetti Celebration
+        triggerConfettiCelebration();
+
+        // Update button and status
+        blowBtn.innerHTML = `<i data-lucide="sparkles" class="w-5 h-5"></i><span>จุดเทียนใหม่ 🕯️</span>`;
+        blowBtn.classList.replace('bg-rose-500', 'bg-amber-500');
+        blowBtn.classList.replace('hover:bg-rose-600', 'hover:bg-amber-600');
+        wishStatusText.textContent = "ขอให้คำอธิษฐานของเธอเป็นจริงในทุกๆ เรื่องนะ! 💖🎉";
+        
+        showToast("เป่าเทียนสำเร็จแล้ว! พรทุกประการจงเป็นจริงนะคนดี ✨");
+      } else {
+        // Relight candles
+        candlesBlown = false;
+        cakeFlames.classList.add('flame-on');
+        cakeFlames.classList.remove('flame-extinguished');
+        smokeContainer.classList.add('hidden');
+
+        blowBtn.innerHTML = `<i data-lucide="wind" class="w-5 h-5"></i><span>เป่าเทียนเลย 🎂💨</span>`;
+        blowBtn.classList.replace('bg-amber-500', 'bg-rose-500');
+        blowBtn.classList.replace('hover:bg-amber-600', 'hover:bg-rose-600');
+        wishStatusText.textContent = "จุดเทียนพร้อมแล้ว อธิษฐานอีกรอบได้เลยนะ ✨";
+      }
+      lucide.createIcons();
+    });
+
+    function triggerConfettiCelebration() {
+      if (typeof confetti === 'function') {
+        const count = 200;
+        const defaults = { origin: { y: 0.7 } };
+
+        function fire(particleRatio, opts) {
+          confetti(Object.assign({}, defaults, opts, {
+            particleCount: Math.floor(count * particleRatio)
+          }));
+        }
+
+        fire(0.25, { spread: 26, startVelocity: 55, colors: ['#ff4d6d', '#ff758f', '#ffb3c1'] });
+        fire(0.2, { spread: 60, colors: ['#ffd166', '#06d6a0', '#118ab2'] });
+        fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+        fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, colors: ['#f43f5e', '#fbbf24'] });
+        fire(0.1, { spread: 120, startVelocity: 45 });
+      }
+    }
+
+    /* 4. Envelope Opening / Toggle Animation */
+    const envelopeTrigger = document.getElementById('envelopeTrigger');
+    let envelopeOpened = false;
+
+    envelopeTrigger.addEventListener('click', () => {
+      getAudioContext();
+      envelopeOpened = !envelopeOpened;
+      if (envelopeOpened) {
+        envelopeTrigger.classList.add('envelope-open');
+        playTone(587.33, 0.3, 'sine', 0.08); // pleasant chime
+        setTimeout(() => playTone(880, 0.4, 'sine', 0.08), 100);
+      } else {
+        envelopeTrigger.classList.remove('envelope-open');
+      }
+    });
+
+    /* 5. Photo Modal Details */
+    function openPhotoModal(title, desc, imgUrl) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalDesc').textContent = desc;
+      document.getElementById('modalImg').src = imgUrl;
+      const modal = document.getElementById('photoModal');
+      modal.classList.remove('hidden');
+    }
+
+    function closePhotoModal() {
+      document.getElementById('photoModal').classList.add('hidden');
+    }
+
+    // Close modal on click outside
+    document.getElementById('photoModal').addEventListener('click', (e) => {
+      if (e.target.id === 'photoModal') closePhotoModal();
+    });
+
+    /* 6. Love Coupon Redemption Feature */
+    function redeemCoupon(btnElement, couponName) {
+      getAudioContext();
+      playTone(523.25, 0.25, 'triangle', 0.1);
+      setTimeout(() => playTone(659.25, 0.35, 'triangle', 0.1), 120);
+
+      btnElement.disabled = true;
+      btnElement.textContent = "ใช้สิทธิ์แล้ว ❤️";
+      btnElement.classList.remove('bg-rose-500', 'hover:bg-rose-600');
+      btnElement.classList.add('bg-emerald-500', 'cursor-default');
+
+      showToast(`กดใช้ "${couponName}" สำเร็จ! ยินดีให้บริการด้วยความรัก 💖`);
+    }
+
+    /* 7. Custom Toast Box Function (No alert) */
+    let toastTimeout = null;
+    function showToast(msg) {
+      const toast = document.getElementById('toastBox');
+      const text = document.getElementById('toastMessage');
+      text.textContent = msg;
+
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3500);
+    }
+  </script>
+</body>
+</html>
